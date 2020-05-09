@@ -6,10 +6,7 @@ import { Home } from "./Home";
 const Routes = () => {
 	return (
 		<Switch>
-			<Route exact path="/">
-				<Redirect to="/home" />
-			</Route>
-			<Route exact path="/home" component={Home} />
+			<Route exact path="/" component={Home} />
 		</Switch>
 	);
 };
