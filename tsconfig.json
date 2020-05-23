@@ -6,7 +6,8 @@
 		"target": "es6",
 		"lib": ["es2015", "es2017", "dom"],
 		"removeComments": true,
-		"allowSyntheticDefaultImports": false,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
 		"experimentalDecorators": true,
 		"jsx": "react",
 		"allowJs": true,
@@ -14,7 +15,8 @@
 		"paths": {
 			"@components/*": ["src/components/*"],
 			"@interfaces/*": ["src/interfaces/*"],
-			"@actions/*": ["src/store/actions/*"]
+			"@actions/*": ["src/store/actions/*"],
+			"@api/*": ["src/api/*"]
 		}
 	}
 }

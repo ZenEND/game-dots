@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
-import { post } from "./post";
+import { winners} from './winners'
 
 export const rootReducer = combineReducers({
-	post,
+	winners,
 });

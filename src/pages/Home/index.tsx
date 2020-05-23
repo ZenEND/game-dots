@@ -1,43 +1,48 @@
-import * as React from "react";
-import * as actions from "@actions/post";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { getWinners } from "@actions/winners";
+import { getSettings } from '@actions/settings'
+import {connect, MapDispatchToProps } from "react-redux";
 import { withRouter, RouteChildrenProps } from "react-router-dom";
-import axios from "axios";
+import { IWinner} from "@interfaces/winner";
+import { WinnersTable } from "@components/WinnersTable";
+import { Playground } from '@components/Playground'
+import './style.scss'
+import { ISettings } from "@interfaces/settings";
 
-interface IProps extends RouteChildrenProps {}
 
-const Home = ({ history }: IProps) => {
-	enum person {
-		age,
-		name,
-	}
+interface IProps extends RouteChildrenProps, ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {
+	getWinners: () => Promise<IWinner[]>
+	getSettings: () => Promise<ISettings>	
+}
 
-	interface IResponse {
-		data: {
-			completed: boolean;
-		}[];
-	}
 
-	interface Iprops {}
-
-	React.useEffect(() => {
-		axios
-			.get("https://jsonplaceholder.typicode.com/todos/1")
-			.then(<T extends IResponse>(res: T) => {
-				console.log(res.data);
-			});
-	}, []);
+const Home:React.FC<IProps> = ({ history, getWinners, getSettings }: IProps) => {
+	const [isGoing, setGoing] = useState(false);
+	useEffect(() => {
+		getWinners()
+		getSettings()
+	}, [])
 	return (
-		<div>
-			<p>This is a Home page </p>
+		<div className='home'>
+			<Playground />
+			<WinnersTable />
 		</div>
 	);
 };
 
-const mapDispatchToProps = {
-	setPost: actions.setPost,
+const mapStateToProps = state => {
+	return{
+		winners: state.winners
+	}
+}
+
+
+const mapDispatchToProps = () => dispatch => {
+	return{
+		getWinners: () => dispatch(getWinners()),
+		getSettings: () => dispatch(getSettings())
+	}
 };
 
-const withRouterHome = withRouter(Home);
-const connectedHome = connect(null, null)(withRouterHome);
-export { connectedHome as Home };
+const connector = connect(mapStateToProps, mapDispatchToProps)(Home)
+export { connector as Home };

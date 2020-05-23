@@ -1,6 +1,7 @@
 const path = require("path");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const Dotenv = require('dotenv-webpack')
 const { TsConfigPathsPlugin } = require("awesome-typescript-loader");
 
 module.exports = {
@@ -54,5 +55,9 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: "./public/index.html",
 		}),
+		new Dotenv({
+			path: './.env',
+			safe: true
+		})
 	],
 };

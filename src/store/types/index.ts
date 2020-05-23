@@ -1,3 +1,2 @@
-import { post } from "./post";
-
-export { post };
+export * from './winners'
+export * from './settings'
