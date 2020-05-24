@@ -1,7 +1,7 @@
 import * as types from "../types";
-import {ISettings} from "@interfaces/settings";
+import { ISettings } from "@interfaces/settings";
 
-const winners = (state: ISettings = {}, action) => {
+const settings = (state: ISettings = {}, action) => {
     switch (action.type) {
         case types.settings.SET_SETTINGS:
             return action.payload
@@ -10,4 +10,4 @@ const winners = (state: ISettings = {}, action) => {
     }
 };
 
-export { winners };
+export { settings };
