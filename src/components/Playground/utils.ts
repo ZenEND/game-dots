@@ -1,3 +1,4 @@
+// Return correct status of box
 export const getStatus = (status) => {
     switch (status) {
         case 0:
@@ -11,6 +12,8 @@ export const getStatus = (status) => {
     }
 }
 
+
+// Return correct button text
 export const playButtonText = (firstGame, isGoing) => {
     if (firstGame && !isGoing) {
         return "Play"

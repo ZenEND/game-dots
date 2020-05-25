@@ -31,6 +31,15 @@ const Playground = ({ settings, postWinner }: IProp) => {
 
     const { field, delay } = settings[difficult]
 
+
+    // Generate an array of empy boxes
+    const generateArray = () => {
+        changeArrayBoxes(() => {
+            return Array.from(new Array(field), () => new Array(field).fill(0))
+        })
+    }
+
+    // Clear State on start the game
     const startTheGame = () => {
         generateArray()
         changeComputerScore(0)
@@ -41,6 +50,8 @@ const Playground = ({ settings, postWinner }: IProp) => {
         changeMessage("")
         setIsGoing(!isGoing)
     }
+
+    // Implement computer logic on start the game
     useEffect(() => {
         if (isGoing) {
             changeComputerGoing(setInterval(() => computerToggleBox(), delay))
@@ -52,8 +63,9 @@ const Playground = ({ settings, postWinner }: IProp) => {
         }
     }, [isGoing])
 
+
+    // Check user and computer score
     useEffect(() => {
-        console.log(playerScrore, computerScrore)
         if (playerScrore > (field ** 2) / 2) {
             finishTheGame(name ? name : "User")
         }
@@ -62,6 +74,8 @@ const Playground = ({ settings, postWinner }: IProp) => {
         }
     }, [playerScrore, computerScrore])
 
+
+    // Clear functions on the end of game and toggle message
     const finishTheGame = (winner: string) => {
         changeTimeoutPress(clearTimeout(timeoutPress))
         changeComputerGoing(clearInterval(computerGoing))
@@ -70,6 +84,7 @@ const Playground = ({ settings, postWinner }: IProp) => {
         postWinner(winner, moment().format("HH:mm; DD MMMM YYYY"))
     }
 
+    // Action on press box 
     const toggleBox = (x, y) => {
         if (isGoing) {
             if (arrayBoxes[x][y] === 1) {
@@ -83,16 +98,22 @@ const Playground = ({ settings, postWinner }: IProp) => {
             }
         }
     }
+
+    // Get Random number
     function randomInteger(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+
+    // Check aviable rows on game field
     const aviableRows = (param) => {
         let rows = []
         let array = [...arrayBoxes]
         array.map((row, i) => row.filter(col => col === param).length !== 0 && rows.push(i))
         return rows
     }
+
+    // Check aviable cols on game field
     const aviableCols = (param, row) => {
         let cols = []
         let copyRow = [...row]
@@ -100,6 +121,8 @@ const Playground = ({ settings, postWinner }: IProp) => {
         return cols
     }
 
+
+    // Computer logic
     const computerToggleBox = () => {
         const rows = aviableRows(0)
         const x = rows[randomInteger(0, rows.length - 1)]
@@ -122,12 +145,9 @@ const Playground = ({ settings, postWinner }: IProp) => {
             })
         }, delay))
     }
-    const generateArray = () => {
-        changeArrayBoxes(() => {
-            return Array.from(new Array(field), () => new Array(field).fill(0))
-        })
-    }
 
+
+    // On change difficult generate array with new size
     useEffect(() => {
         generateArray()
     }, [difficult])
