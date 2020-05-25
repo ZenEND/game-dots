@@ -7,6 +7,6 @@ export const getWinners = () => {
 
 
 
-export const postWinner = ({ name, date }) => {
-    return axiosInstance.post("/winners", { name, date }).then(res => res.data)
+export const postWinner = ({ winner, date }) => {
+    return axiosInstance.post("/winners", { winner, date }).then(res => res.data)
 }

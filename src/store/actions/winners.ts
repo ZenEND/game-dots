@@ -16,10 +16,10 @@ export const getWinners = (): ThunkAction<Promise<IWinner>, any, any, any> => di
 
 
 export const postWinner = (name, date): ThunkAction<Promise<IWinner>, any, any, any> => dispatch => {
-    return winnersApi.postWinner({ name, date }).then(payload => {
+    return winnersApi.postWinner({ winner: name, date }).then(payload => {
         dispatch({
-            type: types.winners.POST_WINNER,
-            winner: { name, date }
+            type: types.winners.SET_WINNERS,
+            payload
         })
         return payload
     })

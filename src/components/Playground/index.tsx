@@ -26,6 +26,8 @@ const Playground = ({ settings, postWinner }: IProp) => {
     const [cordinates, changeCordinates] = useState({ x: null, y: null })
     const [playerScrore, changePlayerScore] = useState<number>(0)
     const [computerScrore, changeComputerScore] = useState<number>(0)
+    const [message, changeMessage] = useState<string>("")
+    const [name, changeName] = useState<string>("")
 
     const { field, delay } = settings[difficult]
 
@@ -36,6 +38,7 @@ const Playground = ({ settings, postWinner }: IProp) => {
         changeTimeoutPress(clearTimeout(timeoutPress))
         changeComputerGoing(clearInterval(computerGoing))
         toggleFirstGame(false)
+        changeMessage("")
         setIsGoing(!isGoing)
     }
     useEffect(() => {
@@ -52,29 +55,31 @@ const Playground = ({ settings, postWinner }: IProp) => {
     useEffect(() => {
         console.log(playerScrore, computerScrore)
         if (playerScrore > (field ** 2) / 2) {
-            changeTimeoutPress(clearTimeout(timeoutPress))
-            changeComputerGoing(clearInterval(computerGoing))
-            setIsGoing(!isGoing)
-            postWinner("User", moment().format("HH:MM; DD MMMM YYYY"))
+            finishTheGame(name ? name : "User")
         }
         if (computerScrore > (field ** 2) / 2) {
-            changeTimeoutPress(clearTimeout(timeoutPress))
-            changeComputerGoing(clearInterval(computerGoing))
-            setIsGoing(!isGoing)
-            postWinner("Computer", new Date().toString())
+            finishTheGame("Computer")
         }
     }, [playerScrore, computerScrore])
+
+    const finishTheGame = (winner: string) => {
+        changeTimeoutPress(clearTimeout(timeoutPress))
+        changeComputerGoing(clearInterval(computerGoing))
+        setIsGoing(!isGoing)
+        changeMessage(`${winner} win!`)
+        postWinner(winner, moment().format("HH:mm; DD MMMM YYYY"))
+    }
 
     const toggleBox = (x, y) => {
         if (isGoing) {
             if (arrayBoxes[x][y] === 1) {
+                changeTimeoutPress(clearTimeout(timeoutPress))
                 changeArrayBoxes(prev => {
                     let newState = [...prev]
                     newState[x][y] = 2
                     return newState
                 })
                 changePlayerScore(playerScrore + 1)
-                changeTimeoutPress(clearTimeout(timeoutPress))
             }
         }
     }
@@ -101,29 +106,22 @@ const Playground = ({ settings, postWinner }: IProp) => {
         const cols = aviableCols(0, [...arrayBoxes[x]])
         const y = cols[randomInteger(0, cols.length - 1)]
         changeCordinates({ x, y })
-    }
-
-    useEffect(() => {
-        const { x, y } = cordinates
-        if (isGoing) {
+        changeArrayBoxes(prev => {
+            let newState = [...prev]
+            newState[x][y] = 1
+            return newState
+        })
+        changeTimeoutPress(setTimeout(() => {
             changeArrayBoxes(prev => {
                 let newState = [...prev]
-                newState[x][y] = 1
+                newState[x][y] = 3
                 return newState
             })
-            changeTimeoutPress(setTimeout(() => {
-                changeArrayBoxes(prev => {
-                    let newState = [...prev]
-                    newState[x][y] = 3
-                    return newState
-                })
-                changeComputerScore(prev => {
-                    return prev + 1
-                })
-            }, delay))
-        }
-    }, [cordinates])
-
+            changeComputerScore(prev => {
+                return prev + 1
+            })
+        }, delay))
+    }
     const generateArray = () => {
         changeArrayBoxes(() => {
             return Array.from(new Array(field), () => new Array(field).fill(0))
@@ -145,8 +143,11 @@ const Playground = ({ settings, postWinner }: IProp) => {
                     <option value="normalMode">Normal</option>
                     <option value="hardMode">Hard</option>
                 </select>
-                <input placeholder='Enter your name' />
+                <input placeholder='Enter your name' value={name} onChange={(e) => changeName(e.currentTarget.value)} />
                 <button onClick={() => startTheGame()}>{playButtonText(firstGame, isGoing)}</button>
+            </div>
+            <div className='message'>
+                {message && message}
             </div>
             <div className="boxes">
                 {arrayBoxes.map((row, x) => (
