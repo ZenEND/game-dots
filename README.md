@@ -1,5 +1,15 @@
 # StarNavi Front-end Task Game In Dots
 
+
+## Project Stack 
+- React 
+- Redux 
+- Typescript 
+- Axios 
+- Webpack
+
+
+
 ## Run Project
 
 #### Setup Project
@@ -19,14 +29,6 @@ npm run start
 ```
 npm run build
 ```
-
-## Project Stack 
-- React 
-- Redux 
-- Typescript 
-- Axios 
-- Webpack
-
 
 ## We have next gameplay:
 - user set game difficulty and name
